@@ -494,6 +494,7 @@
 			<0xff 59>,  /* mss_to_apps_irq(2) */
 			<0xff 60>,  /* mss_to_apps_irq(3) */
 			<0xff 61>,  /* mss_a2_bam_irq */
+			<0xff 65>,
 			<0xff 70>,  /* iommu_pmon_nonsecure_irq */
 			<0xff 74>,  /* osmmu_CIrpt[1] */
 			<0xff 75>,  /* osmmu_CIrpt[0] */
@@ -506,7 +507,11 @@
 			<0xff 102>,  /* osmmu_CIrpt[1] */
 			<0xff 105>, /* iommu_pmon_nonsecure_irq */
 			<0xff 109>,  /* ocmem_dm_nonsec_irq */
+			<0xff 115>,
 			<0xff 126>,  /* bam_irq[0] */
+			<0xff 128>,
+			<0xff 136>,
+			<0xff 137>,
 			<0xff 155>,  /* sdcc_irq[0] */
 			<0xff 163>,  /* usb30_ee1_irq */
 			<0xff 164>,  /* sps */
@@ -614,7 +619,8 @@
 			<42  108>,
 			<43  111>,
 			<44  115>,
-			<45  127>;
+			<45  127>,
+			<0xff  114>;
 
 	};
 

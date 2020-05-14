@@ -499,7 +499,12 @@
 		clock-names = "mdp_core_clk", "iface_clk",
 				"core_clk", "alt_iface_clk", "extp_clk";
 
+		/* sii6400 require nothing from HDMI HPD pin, but
+		   it require pm8994 MPPS4 for its power enable pin,
+		   so comment out this pin to follow hardware design */
+#if 0
 		qcom,hdmi-tx-hpd = <&pm8994_mpps 4 0>;
+#endif
 		qcom,mdss-fb-map = <&mdss_fb1>;
 
 		hdmi_audio: qcom,msm-hdmi-audio-rx {

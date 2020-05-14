@@ -31,8 +31,6 @@
 			compatible = "qcom,qpnp-power-on";
 			reg = <0x800 0x100>;
 			qcom,secondary-pon-reset;
-			qcom,s3-debounce = <32>;
-			qcom,s3-src = "kpdpwr-and-resin";
 			pon_perph_reg: qcom,pon_perph_reg {
 				regulator-name = "pon_spare_reg";
 				qcom,pon-spare-reg-addr = <0x8c>;
@@ -141,6 +139,26 @@
 				reg = <0xa300 0x100>;
 				qcom,pin-num = <4>;
 				status = "disabled";
+			};
+		};
+
+		/* configure pmi8994 MPP4 as back-light of touch key */
+		pmi8994_leds: qcom,leds@a300 {
+			compatible = "qcom,leds-qpnp";
+			reg = <0xa300 0x100>;
+			status = "okay";
+
+			qcom,led_mpp_4 {
+				label = "mpp";
+				linux,name = "button-backlight";
+				linux,default-trigger = "none";
+				qcom,default-state = "off";
+				qcom,max-current = <40>;
+				qcom,current-setting = <5>;
+				qcom,id = <6>;
+				qcom,mode = "manual";
+				qcom,source-sel = <1>;
+				qcom,mode-ctrl = <0x60>; /* current sink mode */
 			};
 		};
 
@@ -323,6 +341,7 @@
 			qcom,capacity-learning-on;
 			qcom,fg-cc-cv-threshold-mv = <4340>;
 			qcom,pmic-revid = <&pmi8994_revid>;
+			qcom,vbat-estimate-diff-mv = <100>;
 
 			qcom,fg-soc@4000 {
 				status = "okay";
@@ -536,11 +555,12 @@
 			qcom,boost-duty-ns = <26>;
 			qcom,mod-freq-khz = <9600>;
 			qcom,dim-mode = "hybrid";
+			qcom,dim-method = "linear";
 			qcom,hyb-thres = <625>;
 			qcom,sync-dly-us = <800>;
-			qcom,fs-curr-ua = <16000>;
+			qcom,fs-curr-ua = <20000>;
 			qcom,en-phase-stag;
-			qcom,led-strings-list = [00 01 02 03];
+			qcom,led-strings-list = [00 01];
 			qcom,en-ext-pfet-sc-pro;
 		};
 
@@ -552,10 +572,10 @@
 				     <0x3 0xc0 0x1>;
 			interrupt-names = "sc-irq", "play-irq";
 			qcom,play-mode = "direct";
-			qcom,wave-play-rate-us = <5263>;
+			qcom,wave-play-rate-us = <4350>;
 			qcom,actuator-type = "lra";
 			qcom,wave-shape = "square";
-			qcom,vmax-mv = <2000>;
+			qcom,vmax-mv = <2800>;
 			qcom,ilim-ma = <800>;
 			qcom,sc-deb-cycles = <8>;
 			qcom,int-pwm-freq-khz = <505>;
@@ -573,6 +593,8 @@
 			reg = <0xd000 0x100>;
 			label = "rgb";
 			status = "okay";
+                        deepsleep_gpio = <&msm_gpio 133 0x00>;
+                        deepsleep_gpio_label = "rpm_led_switch";
 
 			qcom,rgb_0 {
 				label = "rgb";
@@ -583,8 +605,13 @@
 				qcom,max-current = <12>;
 				qcom,default-state = "off";
 				linux,name = "red";
-				linux,default-trigger =
-					"battery-charging";
+				qcom,start-idx = <0>;
+				qcom,ramp-step-ms = <100>;
+				qcom,duty-pcts = [00 0a 14 1e 28 32 3c 46 50 5a 64
+				   64 5a 50 46 3c 32 28 1e 14 0a 00];
+				qcom,pause-lo = <1000>;
+				qcom,lut-flags = <27>;
+				qcom,use-blink;
 			};
 
 			qcom,rgb_1 {
@@ -596,7 +623,13 @@
 				qcom,max-current = <12>;
 				qcom,default-state = "off";
 				linux,name = "green";
-				linux,default-trigger = "battery-full";
+				qcom,start-idx = <0>;
+				qcom,ramp-step-ms = <100>;
+				qcom,duty-pcts = [00 0a 14 1e 28 32 3c 46 50 5a 64
+				   64 5a 50 46 3c 32 28 1e 14 0a 00];
+				qcom,pause-lo = <1000>;
+				qcom,lut-flags = <27>;
+				qcom,use-blink;
 			};
 
 			qcom,rgb_2 {
@@ -608,7 +641,14 @@
 				qcom,max-current = <12>;
 				qcom,default-state = "off";
 				linux,name = "blue";
-				linux,default-trigger = "boot-indication";
+				qcom,start-idx = <0>;
+				qcom,ramp-step-ms = <100>;
+				qcom,duty-pcts = [00 0a 14 1e 28 32 3c 46 50 5a 64
+				   64 5a 50 46 3c 32 28 1e 14 0a 00];
+				qcom,pause-lo = <1000>;
+				qcom,lut-flags = <27>;
+				qcom,use-blink;
+
 			};
 		};
 
